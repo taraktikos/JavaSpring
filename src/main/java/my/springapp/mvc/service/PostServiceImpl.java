@@ -12,11 +12,8 @@ import java.util.List;
 @Service
 public class PostServiceImpl implements PostService {
 
+    @Autowired
     private PostDao postDao;
-
-    public void setPostDao(PostDao postDao) {
-        this.postDao = postDao;
-    }
 
     @Override
     @Transactional

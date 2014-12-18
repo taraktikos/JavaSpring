@@ -3,7 +3,6 @@ package my.springapp.mvc.controller;
 import my.springapp.mvc.model.Post;
 import my.springapp.mvc.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,13 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/")
 public class PostController {
 
+    @Autowired
     private PostService postService;
-
-    @Autowired(required=true)
-    @Qualifier(value="postService")
-    public void setPostService(PostService ps){
-        postService = ps;
-    }
 
     @RequestMapping(value = "/posts", method = RequestMethod.GET)
     public String listPosts(Model model) {
@@ -56,7 +50,7 @@ public class PostController {
     public String editPost(@PathVariable("id") int id, Model model){
         model.addAttribute("Post", this.postService.getPostById(id));
         model.addAttribute("listPosts", this.postService.listPosts());
-        return "post";
+        return "post/list";
     }
 
 }
