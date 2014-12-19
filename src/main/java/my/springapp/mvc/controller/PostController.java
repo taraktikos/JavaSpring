@@ -5,52 +5,59 @@ import my.springapp.mvc.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
+
 @Controller
-@RequestMapping("/")
+@RequestMapping("/posts")
 public class PostController {
 
     @Autowired
     private PostService postService;
 
-    @RequestMapping(value = "/posts", method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public String listPosts(Model model) {
         model.addAttribute("entities", this.postService.listPosts());
         return "post/list";
     }
 
-    //For add and update Post both
-    @RequestMapping(value= "/post/add", method = RequestMethod.POST)
-    public String addPost(@ModelAttribute("Post") Post p){
-
-        if(p.getId() == 0){
-            //new Post, add it
-            this.postService.addPost(p);
-        }else{
-            //existing Post, call update
-            this.postService.updatePost(p);
-        }
-
-        return "redirect:/posts";
-
+    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    public String createPost(Model model){
+        model.addAttribute("post", new Post());
+        return "post/form";
     }
 
-    @RequestMapping("/remove/{id}")
-    public String removePost(@PathVariable("id") int id){
-
-        this.postService.removePost(id);
-        return "redirect:/posts";
+    @RequestMapping(value= "/create", method = RequestMethod.POST)
+    public String addPost(@Valid @ModelAttribute("Post") Post post, BindingResult result, Model model){
+        if (!result.hasErrors()) {
+            this.postService.addPost(post);
+            return "redirect:/posts";
+        }
+        model.addAttribute("post", post);
+        return "post/form";
     }
 
     @RequestMapping("/edit/{id}")
     public String editPost(@PathVariable("id") int id, Model model){
         model.addAttribute("Post", this.postService.getPostById(id));
-        model.addAttribute("listPosts", this.postService.listPosts());
         return "post/list";
+    }
+
+    @RequestMapping(value= "/update", method = RequestMethod.POST)
+    public String updatePost(@ModelAttribute("Post") Post post){
+        this.postService.updatePost(post);
+        return "redirect:/posts";
+    }
+
+    @RequestMapping("/remove/{id}")
+    public String removePost(@PathVariable("id") int id){
+        this.postService.removePost(id);
+        return "redirect:/posts";
     }
 
 }

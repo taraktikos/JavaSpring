@@ -34,29 +34,26 @@
     </nav>
 
     <div class="container">
-
-        <h1>Post list</h1>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th th:text="#{postList.title}">Title</th>
-                    <th th:text="#{postList.text}">Text</th>
-                    <th th:text="#{postList.createdAt}">Date</th>
-                    <th th:text="#{postList.action}">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="entity: ${entities}">
-                    <td th:text="${{entity.title}}">Entity title</td>
-                    <td th:text="${{entity.text}}">Entity text</td>
-                    <td th:text="${{entity.createdAt}}">10/10/2015</td>
-                    <td>
-                        <button class="btn btn-primary" th:text="#{postList.update}">Update</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <a class="btn btn-primary" th:href="@{/posts/create}" href="./form.html">Create</a>
+        <div class="col-md-6">
+            <h1>Create post</h1>
+            <form th:action="@{/posts/create}" th:object="${post}" method="post">
+                <div class="alert alert-danger">
+                    <ul th:if="${#fields.hasErrors('*')}">
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label  th:for="${#ids.next('title')}">Title</label>
+                    <input type="text" class="form-control" placeholder="Enter title" th:field="*{title}" />
+                    <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect title</p>
+                </div>
+                <div class="form-group">
+                    <label  th:for="${#ids.next('title')}">Text</label>
+                    <textarea class="form-control" placeholder="Enter text" th:field="*{text}"></textarea>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
     </div>
 
     <script th:src="@{/assets/js/bootstrap.js}" src="../../../assets/js/bootstrap.js"></script>

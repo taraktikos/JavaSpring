@@ -61,6 +61,7 @@
             <props>
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
                 <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+                <!--<property name="hibernate.hbm2ddl.auto" value="update" />-->
             </props>
         </property>
     </bean>
