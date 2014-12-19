@@ -22,7 +22,7 @@ public class PostController {
 
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public String listPosts(Model model) {
-        model.addAttribute("entities", this.postService.listPosts());
+        model.addAttribute("entities", postService.listPosts());
         return "post/list";
     }
 
@@ -33,9 +33,9 @@ public class PostController {
     }
 
     @RequestMapping(value= "/create", method = RequestMethod.POST)
-    public String addPost(@Valid @ModelAttribute("Post") Post post, BindingResult result, Model model){
+    public String addPost(@Valid @ModelAttribute("post") Post post, BindingResult result, Model model){
         if (!result.hasErrors()) {
-            this.postService.addPost(post);
+            postService.addPost(post);
             return "redirect:/posts";
         }
         model.addAttribute("post", post);
@@ -44,19 +44,19 @@ public class PostController {
 
     @RequestMapping("/edit/{id}")
     public String editPost(@PathVariable("id") int id, Model model){
-        model.addAttribute("Post", this.postService.getPostById(id));
+        model.addAttribute("Post", postService.getPostById(id));
         return "post/list";
     }
 
     @RequestMapping(value= "/update", method = RequestMethod.POST)
     public String updatePost(@ModelAttribute("Post") Post post){
-        this.postService.updatePost(post);
+        postService.updatePost(post);
         return "redirect:/posts";
     }
 
     @RequestMapping("/remove/{id}")
     public String removePost(@PathVariable("id") int id){
-        this.postService.removePost(id);
+        postService.removePost(id);
         return "redirect:/posts";
     }
 
