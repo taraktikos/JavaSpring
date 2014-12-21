@@ -2,30 +2,33 @@ package my.springapp.mvc.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
 @Table(name="posts")
-public class Post {
+public class User {
 
     @Id
     @GeneratedValue
     private Long id;
 
     @NotEmpty
-    @Size(min=4, max=255)
-    private String title;
+    private String name;
 
     @NotEmpty
-    private String text;
+    private String username;
+
+    @NotEmpty
+    private String password;
 
     @DateTimeFormat(pattern="MM/dd/yyyy")
     @Column(name="created_at")
     private Date createdAt;
 
-    public Post() {
+    public User() {
         createdAt = new Date();
     }
 
@@ -33,24 +36,28 @@ public class Post {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getName() {
+        return name;
     }
 
-    public String getTitle() {
-        return title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getUsername() {
+        return username;
     }
 
-    public String getText() {
-        return text;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Date getCreatedAt() {
@@ -59,10 +66,5 @@ public class Post {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = new Date();
     }
 }
