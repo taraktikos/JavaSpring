@@ -40,7 +40,6 @@ public class PostController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String add(@Valid @ModelAttribute("post") Post post, BindingResult result, Model model){
-        User user = userRepository.findOne(post.getUser().getId());
         if (!result.hasErrors()) {
             postRepository.save(post);
             return "redirect:/posts";
