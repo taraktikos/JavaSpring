@@ -53,6 +53,15 @@
                     <textarea class="form-control" placeholder="Enter text" th:field="*{text}"></textarea>
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Incorrect text</div>
                 </div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('user')} ? 'has-error'">
+                    <label  th:for="${#ids.next('user')}">User</label>
+                    <select th:field="*{user}">
+                        <option th:each="type : ${users}"
+                                th:value="${type}"
+                                th:text="${type.name}">Username</option>
+                    </select>
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Incorrect text</div>
+                </div>
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
         </div>

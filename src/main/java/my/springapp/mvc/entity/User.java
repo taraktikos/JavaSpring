@@ -1,14 +1,14 @@
-package my.springapp.mvc.model;
+package my.springapp.mvc.entity;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name="posts")
+@Table(name="users")
 public class User {
 
     @Id
@@ -23,6 +23,9 @@ public class User {
 
     @NotEmpty
     private String password;
+
+    @OneToMany(mappedBy="user")
+    private List<Post> posts;
 
     @DateTimeFormat(pattern="MM/dd/yyyy")
     @Column(name="created_at")
@@ -58,6 +61,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
     public Date getCreatedAt() {

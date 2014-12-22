@@ -1,8 +1,9 @@
-package my.springapp.mvc.model;
+package my.springapp.mvc.entity;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
@@ -20,6 +21,11 @@ public class Post {
 
     @NotEmpty
     private String text;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name ="user_id", nullable=false)
+    private User user;
 
     @DateTimeFormat(pattern="MM/dd/yyyy")
     @Column(name="created_at")
@@ -59,6 +65,14 @@ public class Post {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @PrePersist

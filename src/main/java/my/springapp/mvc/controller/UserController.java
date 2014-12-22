@@ -1,6 +1,6 @@
 package my.springapp.mvc.controller;
 
-import my.springapp.mvc.model.User;
+import my.springapp.mvc.entity.User;
 import my.springapp.mvc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @RequestMapping(value= "/update", method = RequestMethod.POST)
-    public String updatePost(@Valid @ModelAttribute("user") User user, BindingResult result, Model model){
+    public String update(@Valid @ModelAttribute("user") User user, BindingResult result, Model model){
         if (!result.hasErrors()) {
             userRepository.save(user);
             return "redirect:/users";
