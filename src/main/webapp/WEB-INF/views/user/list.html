@@ -52,7 +52,8 @@
                     <td th:text="${{entity.username}}">Entity username</td>
                     <td th:text="${{entity.createdAt}}">10/10/2015</td>
                     <td>
-                        <button class="btn btn-primary">Update</button>
+                        <a class="btn btn-primary btn-sm" th:href="@{/users/edit/{id}(id=${entity.id})}">Update</a>
+                        <a class="btn btn-danger btn-sm" th:href="@{/users/remove/{id}(id=${entity.id})}">Delete</a>
                     </td>
                 </tr>
             </tbody>

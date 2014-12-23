@@ -74,17 +74,38 @@ public class PostController {
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable("id") Long id, Model model){
-        model.addAttribute("Post", postRepository.findOne(id));
-        return "post/list";
+        model.addAttribute("post", postRepository.findOne(id));
+        model.addAttribute("users", userRepository.findAll());
+        return "post/form";
     }
 
+    @Transactional
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute("post") Post post, BindingResult result, @PathVariable("id") Long id, Model model){
         if (!result.hasErrors()) {
-            postRepository.save(post);
+            Post savedPost = postRepository.findOne(id);
+            if (savedPost == null) {
+                postRepository.save(post);
+            } else {
+                savedPost.setTitle(post.getTitle());
+                savedPost.setText(post.getText());
+                savedPost.setUser(post.getUser());
+                savedPost.getTags().clear();
+                for (Tag tag: post.getTags()) {
+                    Tag savedTag = tagRepository.findByName(tag.getName());
+                    if (savedTag != null) {
+                        savedPost.getTags().add(savedTag);
+                    } else {
+                        savedPost.getTags().add(tag);
+                    }
+                }
+                em.merge(savedPost);
+            }
             return "redirect:/posts";
         }
-        return edit(id, model);
+        model.addAttribute("post", post);
+        model.addAttribute("users", userRepository.findAll());
+        return "post/form";
     }
 
     @RequestMapping("/remove/{id}")

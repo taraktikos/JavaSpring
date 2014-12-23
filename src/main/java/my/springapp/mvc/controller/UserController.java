@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @Controller
@@ -18,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public String list(Model model) {
@@ -44,13 +51,22 @@ public class UserController {
     @RequestMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, Model model){
         model.addAttribute("user", userRepository.findOne(id));
-        return "post/list";
+        return "user/form";
     }
 
-    @RequestMapping(value= "/update", method = RequestMethod.POST)
-    public String update(@Valid @ModelAttribute("user") User user, BindingResult result, Model model){
+    @Transactional
+    @RequestMapping(value= "/update/{id}", method = RequestMethod.POST)
+    public String update(@Valid @ModelAttribute("user") User user, BindingResult result, @PathVariable("id") Long id, Model model){
         if (!result.hasErrors()) {
-            userRepository.save(user);
+            User savedUser = userRepository.findOne(id);
+            if (savedUser == null) {
+                userRepository.save(user);
+            } else {
+                savedUser.setName(user.getName());
+                savedUser.setUsername(user.getUsername());
+                savedUser.setPassword(user.getPassword());
+                em.merge(savedUser);
+            }
             return "redirect:/users";
         }
         model.addAttribute("user", user);

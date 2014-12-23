@@ -37,7 +37,7 @@
     <div class="container">
         <div class="col-md-6">
             <h1>Create post</h1>
-            <form th:action="@{/posts/create}" th:object="${post}" method="post">
+            <form th:action="${post.id} == null ? @{/posts/create} : @{/posts/update/{id}(id=${post.id})}" th:object="${post}" method="post">
                 <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
                     <ul>
                         <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>

@@ -37,13 +37,12 @@
     <div class="container">
         <div class="col-md-6">
             <h1>Create post</h1>
-            <form th:action="@{/users/create}" th:object="${user}" method="post">
+            <form th:action="${user.id} == null ? @{/users/create} : @{/users/update/{id}(id=${user.id})}" th:object="${user}" method="post">
                 <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
                     <ul>
                         <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
                     </ul>
                 </div>
-
                 <div class="form-group" th:classappend="${#fields.hasErrors('name')} ? 'has-error'">
                     <label  th:for="${#ids.next('name')}">Name</label>
                     <input type="text" class="form-control" placeholder="Enter name" th:field="*{name}" />
