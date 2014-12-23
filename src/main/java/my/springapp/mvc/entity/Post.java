@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="posts")
@@ -26,6 +28,10 @@ public class Post {
     @ManyToOne
     @JoinColumn(name ="user_id", nullable=false)
     private User user;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinTable(name="post_tags", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    protected Set<Tag> tags = new HashSet<Tag>();
 
     @DateTimeFormat(pattern="MM/dd/yyyy")
     @Column(name="created_at")
@@ -78,5 +84,35 @@ public class Post {
     @PrePersist
     protected void onCreate() {
         createdAt = new Date();
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public String getTagByComma() {
+        StringBuilder builder = new StringBuilder();
+        int counter = 1;
+        for (Tag tag: tags) {
+            builder.append(tag.getName());
+            if (counter < tags.size()) {
+                builder.append(", ");
+            }
+            counter ++;
+        }
+        return builder.toString();
+    }
+
+    public void setTagByComma(String tagByComma) {
+        for(String tag: tagByComma.split(",")) {
+            tag = tag.trim();
+            if (tag.length() > 0) {
+                tags.add(new Tag(tag.trim()));
+            }
+        }
     }
 }

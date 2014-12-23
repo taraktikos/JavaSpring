@@ -43,7 +43,8 @@
                     <th th:text="#{postList.title}">Title</th>
                     <th th:text="#{postList.text}">Text</th>
                     <th th:text="User">Text</th>
-                    <th th:text="#{postList.createdAt}">Date</th>
+                    <th th:text="#{postList.createdAt}">Tags</th>
+                    <th th:text="Tags">Tags</th>
                     <th th:text="#{postList.action}">Action</th>
                 </tr>
             </thead>
@@ -52,6 +53,7 @@
                     <td th:text="${{entity.title}}">Entity title</td>
                     <td th:text="${{entity.text}}">Entity text</td>
                     <td th:text="${{entity.user.name}}">User name</td>
+                    <td th:text="${{entity.tagByComma}}">User name</td>
                     <td th:text="${{entity.createdAt}}">10/10/2015</td>
                     <td>
                         <button class="btn btn-primary" th:text="#{postList.update}">Update</button>
