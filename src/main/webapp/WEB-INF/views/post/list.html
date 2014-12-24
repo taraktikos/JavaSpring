@@ -53,7 +53,7 @@
                     <td th:text="${{entity.title}}">Entity title</td>
                     <td th:text="${{entity.text}}">Entity text</td>
                     <td th:text="${{entity.user.name}}">User name</td>
-                    <td th:text="${{entity.tagByComma}}">User name</td>
+                    <td th:text="${{entity.tags}}">User name</td>
                     <td th:text="${{entity.createdAt}}">10/10/2015</td>
                     <td>
                         <a class="btn btn-primary btn-sm" th:text="#{postList.update}" th:href="@{/posts/edit/{id}(id=${entity.id})}">Update</a>

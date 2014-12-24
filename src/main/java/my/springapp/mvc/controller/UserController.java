@@ -1,7 +1,11 @@
 package my.springapp.mvc.controller;
 
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
+import my.springapp.mvc.dto.UserDTO;
 import my.springapp.mvc.entity.User;
-import my.springapp.mvc.repository.UserRepository;
+import my.springapp.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,8 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -21,61 +23,57 @@ import javax.validation.Valid;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    UserService userService;
 
-    @PersistenceContext
-    private EntityManager em;
+    MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+    MapperFacade mapper = mapperFactory.getMapperFacade();
 
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public String list(Model model) {
-        model.addAttribute("entities", userRepository.findAll());
+        model.addAttribute("entities", userService.findAll());
         return "user/list";
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model){
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new UserDTO());
         return "user/form";
     }
 
     @RequestMapping(value= "/create", method = RequestMethod.POST)
-    public String add(@Valid @ModelAttribute("user") User user, BindingResult result, Model model){
+    public String add(@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult result, Model model){
+        User user = mapper.map(userDTO, User.class);
         if (!result.hasErrors()) {
-            userRepository.save(user);
+            userService.save(user);
             return "redirect:/users";
         }
-        model.addAttribute("user", user);
+        model.addAttribute("user", userDTO);
         return "user/form";
     }
 
     @RequestMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, Model model){
-        model.addAttribute("user", userRepository.findOne(id));
+        UserDTO userDTO = mapper.map(userService.findOne(id), UserDTO.class);
+        model.addAttribute("user", userDTO);
         return "user/form";
     }
 
     @Transactional
     @RequestMapping(value= "/update/{id}", method = RequestMethod.POST)
-    public String update(@Valid @ModelAttribute("user") User user, BindingResult result, @PathVariable("id") Long id, Model model){
+    public String update(@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult result, @PathVariable("id") Long id, Model model){
+        User user = mapper.map(userDTO, User.class);
         if (!result.hasErrors()) {
-            User savedUser = userRepository.findOne(id);
-            if (savedUser == null) {
-                userRepository.save(user);
-            } else {
-                savedUser.setName(user.getName());
-                savedUser.setUsername(user.getUsername());
-                savedUser.setPassword(user.getPassword());
-                em.merge(savedUser);
-            }
+            user.setId(id);
+            userService.save(user);
             return "redirect:/users";
         }
-        model.addAttribute("user", user);
+        model.addAttribute("user", userDTO);
         return "user/form";
     }
 
     @RequestMapping("/remove/{id}")
     public String remove(@PathVariable("id") Long id){
-        userRepository.delete(id);
+        userService.delete(id);
         return "redirect:/users";
     }
 

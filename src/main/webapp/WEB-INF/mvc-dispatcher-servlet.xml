@@ -85,6 +85,7 @@
         <property name="formatters">
             <set>
                 <bean class="my.springapp.mvc.formatter.UserFormatter" />
+                <bean class="my.springapp.mvc.formatter.TagsFormatter" />
             </set>
         </property>
     </bean>

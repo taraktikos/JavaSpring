@@ -48,10 +48,10 @@
                     <input type="text" class="form-control" placeholder="Enter title" th:field="*{title}" />
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Incorrect title</div>
                 </div>
-                <div class="form-group" th:classappend="${#fields.hasErrors('tagByComma')} ? 'has-error'">
-                    <label  th:for="${#ids.next('tagByComma')}">Tags</label>
-                    <input type="text" class="form-control" placeholder="Enter tags by comma" th:field="*{tagByComma}" />
-                    <div class="alert alert-danger" th:if="${#fields.hasErrors('tagByComma')}" th:errors="*{tagByComma}">Incorrect tagByComma</div>
+                <div class="form-group" th:classappend="${#fields.hasErrors('tags')} ? 'has-error'">
+                    <label  th:for="${#ids.next('tags')}">Tags</label>
+                    <input type="text" class="form-control" placeholder="Enter tags by comma" th:field="*{tags}" />
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('tags')}" th:errors="*{tags}">Incorrect tagByComma</div>
                 </div>
                 <div class="form-group" th:classappend="${#fields.hasErrors('text')} ? 'has-error'">
                     <label  th:for="${#ids.next('text')}">Text</label>

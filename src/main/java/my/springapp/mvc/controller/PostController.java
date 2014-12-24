@@ -1,11 +1,12 @@
 package my.springapp.mvc.controller;
 
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
+import my.springapp.mvc.dto.PostDTO;
 import my.springapp.mvc.entity.Post;
-import my.springapp.mvc.entity.Tag;
-import my.springapp.mvc.entity.User;
-import my.springapp.mvc.repository.PostRepository;
-import my.springapp.mvc.repository.TagRepository;
-import my.springapp.mvc.repository.UserRepository;
+import my.springapp.mvc.service.PostService;
+import my.springapp.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,102 +16,73 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/posts")
 public class PostController {
 
     @Autowired
-    private PostRepository postRepository;
+    private PostService postService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
-    @Autowired
-    private TagRepository tagRepository;
-
-    @PersistenceContext
-    private EntityManager em;
+    MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
+    MapperFacade mapper = mapperFactory.getMapperFacade();
 
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public String list(Model model) {
-        model.addAttribute("entities", postRepository.findAll());
+        model.addAttribute("entities", postService.findAll());
         return "post/list";
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model){
-        model.addAttribute("post", new Post());
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("post", new PostDTO());
+        model.addAttribute("users", userService.findAll());
         return "post/form";
     }
     @Transactional
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public String add(@Valid @ModelAttribute("post") Post post, BindingResult result, Model model){
-        Set<Tag> savedTags = new HashSet<Tag>();
-        for (Tag tag: post.getTags()) {
-            Tag savedTag = tagRepository.findByName(tag.getName());
-            if (savedTag != null) {
-                savedTags.add(savedTag);
-            }
-        }
-        post.getTags().removeAll(savedTags);
-        post.getTags().addAll(savedTags);
+    public String add(@Valid @ModelAttribute("post") PostDTO postDTO, BindingResult result, Model model){
+        Post post = mapper.map(postDTO, Post.class);
         if (!result.hasErrors()) {
-            em.merge(post);
+            postService.save(post);
             return "redirect:/posts";
         }
-        model.addAttribute("post", post);
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("post", postDTO);
+        model.addAttribute("users", userService.findAll());
         return "post/form";
     }
 
+    @Transactional
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable("id") Long id, Model model){
-        model.addAttribute("post", postRepository.findOne(id));
-        model.addAttribute("users", userRepository.findAll());
+        PostDTO postDTO = mapper.map(postService.findOne(id), PostDTO.class);
+        model.addAttribute("post", postDTO);
+        model.addAttribute("users", userService.findAll());
         return "post/form";
     }
 
     @Transactional
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    public String update(@Valid @ModelAttribute("post") Post post, BindingResult result, @PathVariable("id") Long id, Model model){
+    public String update(@Valid @ModelAttribute("post") PostDTO postDTO, BindingResult result, @PathVariable("id") Long id, Model model){
+        Post post = mapper.map(postDTO, Post.class);
         if (!result.hasErrors()) {
-            Post savedPost = postRepository.findOne(id);
-            if (savedPost == null) {
-                postRepository.save(post);
-            } else {
-                savedPost.setTitle(post.getTitle());
-                savedPost.setText(post.getText());
-                savedPost.setUser(post.getUser());
-                savedPost.getTags().clear();
-                for (Tag tag: post.getTags()) {
-                    Tag savedTag = tagRepository.findByName(tag.getName());
-                    if (savedTag != null) {
-                        savedPost.getTags().add(savedTag);
-                    } else {
-                        savedPost.getTags().add(tag);
-                    }
-                }
-                em.merge(savedPost);
-            }
+            post.setId(id);
+            postService.save(post);
             return "redirect:/posts";
         }
-        model.addAttribute("post", post);
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("post", postDTO);
+        model.addAttribute("users", userService.findAll());
         return "post/form";
     }
 
     @RequestMapping("/remove/{id}")
     public String remove(@PathVariable("id") Long id){
-        postRepository.delete(id);
+        postService.delete(id);
         return "redirect:/posts";
     }
 

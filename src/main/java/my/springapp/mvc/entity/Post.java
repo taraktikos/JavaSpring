@@ -93,26 +93,4 @@ public class Post {
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
-
-    public String getTagByComma() {
-        StringBuilder builder = new StringBuilder();
-        int counter = 1;
-        for (Tag tag: tags) {
-            builder.append(tag.getName());
-            if (counter < tags.size()) {
-                builder.append(", ");
-            }
-            counter ++;
-        }
-        return builder.toString();
-    }
-
-    public void setTagByComma(String tagByComma) {
-        for(String tag: tagByComma.split(",")) {
-            tag = tag.trim();
-            if (tag.length() > 0) {
-                tags.add(new Tag(tag.trim()));
-            }
-        }
-    }
 }
