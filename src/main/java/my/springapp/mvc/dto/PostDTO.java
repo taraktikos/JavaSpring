@@ -1,11 +1,5 @@
 package my.springapp.mvc.dto;
 
-import my.springapp.mvc.entity.Tag;
-import my.springapp.mvc.entity.User;
-
-import java.util.HashSet;
-import java.util.Set;
-
 public class PostDTO {
 
     private Long id;
@@ -14,9 +8,9 @@ public class PostDTO {
 
     private String text;
 
-    private User user;
+    private Long userId;
 
-    protected Set<Tag> tags = new HashSet<Tag>();
+    private String tags;
 
     public Long getId() {
         return id;
@@ -42,19 +36,19 @@ public class PostDTO {
         this.text = text;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Set<Tag> getTags() {
+    public String getTags() {
         return tags;
     }
 
-    public void setTags(Set<Tag> tags) {
+    public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

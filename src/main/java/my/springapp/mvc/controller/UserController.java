@@ -1,10 +1,8 @@
 package my.springapp.mvc.controller;
 
-import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
 import my.springapp.mvc.dto.UserDTO;
 import my.springapp.mvc.entity.User;
+import my.springapp.mvc.service.MappingService;
 import my.springapp.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,11 +23,12 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-    MapperFacade mapper = mapperFactory.getMapperFacade();
+    @Autowired
+    MappingService mappingService;
 
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public String list(Model model) {
+        //List<UserDTO> entities = userService.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
         model.addAttribute("entities", userService.findAll());
         return "user/list";
     }
@@ -42,7 +41,7 @@ public class UserController {
 
     @RequestMapping(value= "/create", method = RequestMethod.POST)
     public String add(@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult result, Model model){
-        User user = mapper.map(userDTO, User.class);
+        User user = mappingService.userDTOToUser(userDTO);
         if (!result.hasErrors()) {
             userService.save(user);
             return "redirect:/users";
@@ -53,7 +52,7 @@ public class UserController {
 
     @RequestMapping("/edit/{id}")
     public String edit(@PathVariable("id") Long id, Model model){
-        UserDTO userDTO = mapper.map(userService.findOne(id), UserDTO.class);
+        UserDTO userDTO = mappingService.userToUserDTO(userService.findOne(id));
         model.addAttribute("user", userDTO);
         return "user/form";
     }
@@ -61,9 +60,9 @@ public class UserController {
     @Transactional
     @RequestMapping(value= "/update/{id}", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult result, @PathVariable("id") Long id, Model model){
-        User user = mapper.map(userDTO, User.class);
+        User user = userService.findOne(id);
+        mappingService.userDTOToUser(userDTO, user);
         if (!result.hasErrors()) {
-            user.setId(id);
             userService.save(user);
             return "redirect:/users";
         }

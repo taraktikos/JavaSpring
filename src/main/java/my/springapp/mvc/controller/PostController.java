@@ -1,10 +1,8 @@
 package my.springapp.mvc.controller;
 
-import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.MapperFactory;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
 import my.springapp.mvc.dto.PostDTO;
 import my.springapp.mvc.entity.Post;
+import my.springapp.mvc.service.MappingService;
 import my.springapp.mvc.service.PostService;
 import my.springapp.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +27,8 @@ public class PostController {
     @Autowired
     private UserService userService;
 
-    MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-    MapperFacade mapper = mapperFactory.getMapperFacade();
+    @Autowired
+    MappingService mappingService;
 
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public String list(Model model) {
@@ -47,7 +45,7 @@ public class PostController {
     @Transactional
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String add(@Valid @ModelAttribute("post") PostDTO postDTO, BindingResult result, Model model){
-        Post post = mapper.map(postDTO, Post.class);
+        Post post = mappingService.postDTOToPost(postDTO);
         if (!result.hasErrors()) {
             postService.save(post);
             return "redirect:/posts";
@@ -60,7 +58,7 @@ public class PostController {
     @Transactional
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable("id") Long id, Model model){
-        PostDTO postDTO = mapper.map(postService.findOne(id), PostDTO.class);
+        PostDTO postDTO = mappingService.postToPostDTO(postService.findOne(id));
         model.addAttribute("post", postDTO);
         model.addAttribute("users", userService.findAll());
         return "post/form";
@@ -69,9 +67,9 @@ public class PostController {
     @Transactional
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute("post") PostDTO postDTO, BindingResult result, @PathVariable("id") Long id, Model model){
-        Post post = mapper.map(postDTO, Post.class);
+        Post post = postService.findOne(id);
+        mappingService.postDTOToPost(postDTO, post);
         if (!result.hasErrors()) {
-            post.setId(id);
             postService.save(post);
             return "redirect:/posts";
         }

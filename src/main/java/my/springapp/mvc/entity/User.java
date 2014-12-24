@@ -24,7 +24,7 @@ public class User {
     @NotEmpty
     private String password;
 
-    @OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="user")
     private List<Post> posts;
 
     @DateTimeFormat(pattern="MM/dd/yyyy")
@@ -37,9 +37,6 @@ public class User {
 
     public Long getId() {
         return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {

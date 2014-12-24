@@ -1,21 +1,14 @@
 package my.springapp.mvc.formatter;
 
 import my.springapp.mvc.entity.Tag;
-import my.springapp.mvc.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
-
-import java.text.ParseException;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
 
 @Component
-public class TagsFormatter implements Formatter<Set<Tag>> {
+public class TagsFormatter {
 
-    @Override
-    public Set<Tag> parse(String s, Locale locale) throws ParseException {
+    public Set<Tag> parse(String s) {
         Set<Tag> tags = new HashSet<Tag>();
         for(String tag: s.split(",")) {
             tag = tag.trim();
@@ -26,8 +19,7 @@ public class TagsFormatter implements Formatter<Set<Tag>> {
         return tags;
     }
 
-    @Override
-    public String print(Set<Tag> tags, Locale locale) {
+    public String print(Set<Tag> tags) {
         StringBuilder builder = new StringBuilder();
         int counter = 1;
         for (Tag tag: tags) {
