@@ -5,7 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -26,6 +28,9 @@ public class User {
 
     @OneToMany(mappedBy="user")
     private List<Post> posts;
+
+    @OneToMany(mappedBy="user")
+    private Set<UserRole> roles = new HashSet<UserRole>();
 
     @DateTimeFormat(pattern="MM/dd/yyyy")
     @Column(name="created_at")
@@ -79,4 +84,11 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    public Set<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<UserRole> roles) {
+        this.roles = roles;
+    }
 }
