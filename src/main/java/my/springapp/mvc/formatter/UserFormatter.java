@@ -24,4 +24,5 @@ public class UserFormatter implements Formatter<User> {
     public String print(User user, Locale locale) {
         return user.getId().toString();
     }
+
 }

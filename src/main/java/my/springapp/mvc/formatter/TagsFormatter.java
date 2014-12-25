@@ -31,4 +31,5 @@ public class TagsFormatter {
         }
         return builder.toString();
     }
+
 }

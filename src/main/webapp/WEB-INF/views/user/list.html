@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -48,7 +48,7 @@
             </thead>
             <tbody>
                 <tr th:each="user: ${users}">
-                    <td th:text="${{user.name}}">user name</td>
+                    <td th:text="${{user.username}}">user name</td>
                     <td th:text="${{user.username}}">user username</td>
                     <td th:text="${{user.createdAt}}">10/10/2015</td>
                     <td>

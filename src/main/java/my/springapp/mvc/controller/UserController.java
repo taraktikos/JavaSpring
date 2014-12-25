@@ -27,7 +27,7 @@ public class UserController {
     MappingService mappingService;
 
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
-    public String list(Model model) {
+    public String list(Model model){
         List<UserListDTO> users = mappingService.userListToUserListDTO(userService.findAll());
         model.addAttribute("users", users);
         return "user/list";

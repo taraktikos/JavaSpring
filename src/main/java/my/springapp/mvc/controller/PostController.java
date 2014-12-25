@@ -31,7 +31,7 @@ public class PostController {
     MappingService mappingService;
 
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
-    public String list(Model model) {
+    public String list(Model model){
         List<PostListDTO> posts = mappingService.postListToPostListDTO(postService.findAll());
         model.addAttribute("posts", posts);
         return "post/list";

@@ -76,4 +76,5 @@ public class Tag {
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
     }
+
 }

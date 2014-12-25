@@ -63,4 +63,5 @@ public class PostListDTO {
     public void setTags(String tags) {
         this.tags = tags;
     }
+
 }

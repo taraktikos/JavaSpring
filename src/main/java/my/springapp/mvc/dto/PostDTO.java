@@ -1,7 +1,6 @@
 package my.springapp.mvc.dto;
 
 import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.validation.constraints.NotNull;
 
 public class PostDTO {

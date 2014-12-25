@@ -51,4 +51,5 @@ public class PostService {
     public void delete(Long id) {
         postRepository.delete(id);
     }
+
 }

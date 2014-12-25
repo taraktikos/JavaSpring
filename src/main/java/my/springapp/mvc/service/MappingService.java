@@ -83,4 +83,5 @@ public class MappingService {
                 .register();
         return mapper.mapAsList(posts, PostListDTO.class);
     }
+
 }
