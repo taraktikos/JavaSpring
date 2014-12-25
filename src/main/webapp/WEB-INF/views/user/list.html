@@ -47,13 +47,13 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="entity: ${entities}">
-                    <td th:text="${{entity.name}}">Entity name</td>
-                    <td th:text="${{entity.username}}">Entity username</td>
-                    <td th:text="${{entity.createdAt}}">10/10/2015</td>
+                <tr th:each="user: ${users}">
+                    <td th:text="${{user.name}}">user name</td>
+                    <td th:text="${{user.username}}">user username</td>
+                    <td th:text="${{user.createdAt}}">10/10/2015</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" th:href="@{/users/edit/{id}(id=${entity.id})}">Update</a>
-                        <a class="btn btn-danger btn-sm" th:href="@{/users/remove/{id}(id=${entity.id})}">Delete</a>
+                        <a class="btn btn-primary btn-sm" th:href="@{/users/edit/{id}(id=${user.id})}">Update</a>
+                        <a class="btn btn-danger btn-sm" th:href="@{/users/remove/{id}(id=${user.id})}">Delete</a>
                     </td>
                 </tr>
             </tbody>

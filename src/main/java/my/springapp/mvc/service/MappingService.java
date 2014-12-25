@@ -1,15 +1,21 @@
 package my.springapp.mvc.service;
 
+import ma.glasnost.orika.CustomMapper;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
+import ma.glasnost.orika.MappingContext;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 import my.springapp.mvc.dto.PostDTO;
+import my.springapp.mvc.dto.PostListDTO;
 import my.springapp.mvc.dto.UserDTO;
+import my.springapp.mvc.dto.UserListDTO;
 import my.springapp.mvc.entity.Post;
 import my.springapp.mvc.entity.User;
 import my.springapp.mvc.formatter.TagsFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MappingService {
@@ -37,7 +43,7 @@ public class MappingService {
     }
 
     public Post postDTOToPost(PostDTO postDTO) {
-        return mapper.map(postDTO, Post.class);
+        return postDTOToPost(postDTO, new Post());
     }
 
     public Post postDTOToPost(PostDTO postDTO, Post post) {
@@ -56,5 +62,25 @@ public class MappingService {
         PostDTO postDTO = mapper.map(post, PostDTO.class);
         postDTO.setTags(tagsFormatter.print(post.getTags()));
         return postDTO;
+    }
+
+    public List<UserListDTO> userListToUserListDTO(List<User> users) {
+        return mapper.mapAsList(users, UserListDTO.class);
+    }
+
+    public List<PostListDTO> postListToPostListDTO(List<Post> posts) {
+        mapperFactory.classMap(Post.class, PostListDTO.class)
+                .field("user.name", "userName")
+                .exclude("tags")
+                .byDefault()
+                .customize(new CustomMapper<Post, PostListDTO>() {
+                    @Override
+                    public void mapAtoB(Post post, PostListDTO postListDTO, MappingContext context) {
+                        super.mapAtoB(post, postListDTO, context);
+                        postListDTO.setTags(tagsFormatter.print(post.getTags()));
+                    }
+                })
+                .register();
+        return mapper.mapAsList(posts, PostListDTO.class);
     }
 }

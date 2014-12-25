@@ -1,6 +1,7 @@
 package my.springapp.mvc.controller;
 
 import my.springapp.mvc.dto.PostDTO;
+import my.springapp.mvc.dto.PostListDTO;
 import my.springapp.mvc.entity.Post;
 import my.springapp.mvc.service.MappingService;
 import my.springapp.mvc.service.PostService;
@@ -13,9 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/posts")
@@ -32,7 +32,8 @@ public class PostController {
 
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public String list(Model model) {
-        model.addAttribute("entities", postService.findAll());
+        List<PostListDTO> posts = mappingService.postListToPostListDTO(postService.findAll());
+        model.addAttribute("posts", posts);
         return "post/list";
     }
 
@@ -42,7 +43,7 @@ public class PostController {
         model.addAttribute("users", userService.findAll());
         return "post/form";
     }
-    @Transactional
+
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String add(@Valid @ModelAttribute("post") PostDTO postDTO, BindingResult result, Model model){
         Post post = mappingService.postDTOToPost(postDTO);
@@ -55,7 +56,6 @@ public class PostController {
         return "post/form";
     }
 
-    @Transactional
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable("id") Long id, Model model){
         PostDTO postDTO = mappingService.postToPostDTO(postService.findOne(id));
@@ -64,7 +64,6 @@ public class PostController {
         return "post/form";
     }
 
-    @Transactional
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute("post") PostDTO postDTO, BindingResult result, @PathVariable("id") Long id, Model model){
         Post post = postService.findOne(id);

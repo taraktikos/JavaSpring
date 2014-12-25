@@ -1,23 +1,20 @@
 package my.springapp.mvc.dto;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import java.util.Date;
 
-import javax.validation.constraints.NotNull;
-
-public class PostDTO {
+public class PostListDTO {
 
     private Long id;
 
-    @NotEmpty
     private String title;
 
-    @NotEmpty
     private String text;
 
-    @NotNull
-    private Long userId;
+    private String userName;
 
     private String tags;
+
+    private Date createdAt;
 
     public Long getId() {
         return id;
@@ -43,19 +40,27 @@ public class PostDTO {
         this.text = text;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public String getTags() {
         return tags;
     }
 
     public void setTags(String tags) {
         this.tags = tags;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 }

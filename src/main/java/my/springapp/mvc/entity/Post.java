@@ -31,7 +31,7 @@ public class Post {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     @JoinTable(name="post_tags", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    protected Set<Tag> tags = new HashSet<Tag>();
+    private Set<Tag> tags = new HashSet<Tag>();
 
     @DateTimeFormat(pattern="MM/dd/yyyy")
     @Column(name="created_at")

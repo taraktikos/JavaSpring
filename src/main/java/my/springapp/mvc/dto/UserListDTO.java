@@ -1,19 +1,16 @@
 package my.springapp.mvc.dto;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import java.util.Date;
 
-public class UserDTO {
+public class UserListDTO {
 
     private Long id;
 
-    @NotEmpty
     private String name;
 
-    @NotEmpty
     private String username;
 
-    @NotEmpty
-    private String password;
+    private Date createdAt;
 
     public Long getId() {
         return id;
@@ -39,11 +36,11 @@ public class UserDTO {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

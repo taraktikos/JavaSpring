@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 public class PostService {
 
     @Autowired
@@ -34,33 +36,16 @@ public class PostService {
     }
 
     public void save(Post post) {
-        if (post.getId() == null) {
-            Set<Tag> savedTags = new HashSet<Tag>();
-            for (Tag tag: post.getTags()) {
-                Tag savedTag = tagRepository.findByName(tag.getName());
-                if (savedTag != null) {
-                    savedTags.add(savedTag);
-                }
+        Set<Tag> savedTags = new HashSet<Tag>();
+        for (Tag tag: post.getTags()) {
+            Tag savedTag = tagRepository.findByName(tag.getName());
+            if (savedTag != null) {
+                savedTags.add(savedTag);
             }
-            post.getTags().removeAll(savedTags);
-            post.getTags().addAll(savedTags);
-            em.merge(post);
-        } else {
-            Post savedPost = postRepository.findOne(post.getId());
-            savedPost.setTitle(post.getTitle());
-            savedPost.setText(post.getText());
-            savedPost.setUser(post.getUser());
-            savedPost.getTags().clear();
-            for (Tag tag: post.getTags()) {
-                Tag savedTag = tagRepository.findByName(tag.getName());
-                if (savedTag != null) {
-                    savedPost.getTags().add(savedTag);
-                } else {
-                    savedPost.getTags().add(tag);
-                }
-            }
-            em.merge(savedPost);
         }
+        post.getTags().removeAll(savedTags);
+        post.getTags().addAll(savedTags);
+        em.merge(post);
     }
 
     public void delete(Long id) {

@@ -1,6 +1,7 @@
 package my.springapp.mvc.controller;
 
 import my.springapp.mvc.dto.UserDTO;
+import my.springapp.mvc.dto.UserListDTO;
 import my.springapp.mvc.entity.User;
 import my.springapp.mvc.service.MappingService;
 import my.springapp.mvc.service.UserService;
@@ -12,9 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/users")
@@ -28,8 +28,8 @@ public class UserController {
 
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public String list(Model model) {
-        //List<UserDTO> entities = userService.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
-        model.addAttribute("entities", userService.findAll());
+        List<UserListDTO> users = mappingService.userListToUserListDTO(userService.findAll());
+        model.addAttribute("users", users);
         return "user/list";
     }
 
@@ -57,7 +57,6 @@ public class UserController {
         return "user/form";
     }
 
-    @Transactional
     @RequestMapping(value= "/update/{id}", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute("user") UserDTO userDTO, BindingResult result, @PathVariable("id") Long id, Model model){
         User user = userService.findOne(id);

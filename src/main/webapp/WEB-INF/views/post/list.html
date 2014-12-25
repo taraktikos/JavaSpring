@@ -49,15 +49,15 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="entity: ${entities}">
-                    <td th:text="${{entity.title}}">Entity title</td>
-                    <td th:text="${{entity.text}}">Entity text</td>
-                    <td th:text="${{entity.user.name}}">User name</td>
-                    <td th:text="${{entity.tags}}">User name</td>
-                    <td th:text="${{entity.createdAt}}">10/10/2015</td>
+                <tr th:each="post: ${posts}">
+                    <td th:text="${{post.title}}">post title</td>
+                    <td th:text="${{post.text}}">post text</td>
+                    <td th:text="${{post.userName}}">User name</td>
+                    <td th:text="${{post.tags}}">User name</td>
+                    <td th:text="${{post.createdAt}}">10/10/2015</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" th:text="#{postList.update}" th:href="@{/posts/edit/{id}(id=${entity.id})}">Update</a>
-                        <a class="btn btn-danger btn-sm" th:href="@{/posts/remove/{id}(id=${entity.id})}">Delete</a>
+                        <a class="btn btn-primary btn-sm" th:text="#{postList.update}" th:href="@{/posts/edit/{id}(id=${post.id})}">Update</a>
+                        <a class="btn btn-danger btn-sm" th:href="@{/posts/remove/{id}(id=${post.id})}">Delete</a>
                     </td>
                 </tr>
             </tbody>
