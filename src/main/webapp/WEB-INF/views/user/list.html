@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -29,6 +29,17 @@
                     <li><a th:href="@{/}" href="./../welcome.html">Home</a></li>
                     <li class="active"><a th:href="@{/users}" href="./../user/list.html" th:text="User">User</a></li>
                     <li><a th:href="@{/posts}" href="./../post/list.html" th:text="#{menu.blog}">Blog</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active" sec:authorize="!isAuthenticated()"><a href="./access/login.html" th:href="@{/login}">Login</a></li>
+                    <li sec:authorize="isAuthenticated()" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span sec:authentication="name"></span> <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#">Profile</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#" th:href="@{/logout}">Logout</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -61,6 +72,7 @@
         <a class="btn btn-primary" th:href="@{/users/create}" href="./form.html">Create</a>
     </div>
 
+    <script th:src="@{/assets/js/jquery-2.1.3.min.js}" src="../../assets/js/jquery-2.1.3.min.js"></script>
     <script th:src="@{/assets/js/bootstrap.js}" src="../../../assets/js/bootstrap.js"></script>
 </body>
 </html>

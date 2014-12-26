@@ -30,31 +30,13 @@
                     <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/users}" href="./user/list.html" th:text="User">User</a></li>
                     <li><a th:href="@{/posts}" href="./post/list.html" th:text="#{menu.blog}">Blog</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li sec:authorize="!isAuthenticated()"><a href="./access/login.html" th:href="@{/login}">Login</a></li>
-                    <li sec:authorize="isAuthenticated()" class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span sec:authentication="name"></span> <span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Profile</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#" th:href="@{/logout}">Logout</a></li>
-                        </ul>
-                    </li>
-                </ul>
             </div>
         </div>
     </nav>
 
     <div class="container">
 
-        <div class="starter-template">
-            <h1>Welcome</h1>
-            <p class="lead" th:text="${{message}}">Hello</p>
-            <div sec:authorize="isAuthenticated()">
-                Logged user: <span sec:authentication="name"></span>
-                Roles: <span sec:authentication="principal.authorities">[]</span>
-            </div>
-        </div>
+        <h1>403 Access denied</h1>
 
     </div>
 
