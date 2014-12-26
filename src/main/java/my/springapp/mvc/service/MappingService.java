@@ -26,8 +26,31 @@ public class MappingService {
     @Autowired
     private TagsFormatter tagsFormatter;
 
-    MapperFactory mapperFactory = new DefaultMapperFactory.Builder().build();
-    MapperFacade mapper = mapperFactory.getMapperFacade();
+    MapperFactory mapperFactory;
+    MapperFacade mapper;
+
+    public MappingService() {
+        mapperFactory = new DefaultMapperFactory.Builder().build();
+        mapperFactory.classMap(Post.class, PostDTO.class)
+                .field("user.id", "userId")
+                .exclude("tags")
+                .byDefault()
+                .register();
+        mapperFactory.classMap(Post.class, PostListDTO.class)
+                .field("user.name", "userName")
+                .exclude("tags")
+                .byDefault()
+                .customize(new CustomMapper<Post, PostListDTO>() {
+                    @Override
+                    public void mapAtoB(Post post, PostListDTO postListDTO, MappingContext context) {
+                        super.mapAtoB(post, postListDTO, context);
+                        postListDTO.setTags(tagsFormatter.print(post.getTags()));
+                    }
+                })
+                .register();
+
+        mapper = mapperFactory.getMapperFacade();
+    }
 
     public User userDTOToUser(UserDTO userDTO) {
         return mapper.map(userDTO, User.class);
@@ -54,11 +77,6 @@ public class MappingService {
     }
 
     public PostDTO postToPostDTO(Post post) {
-        mapperFactory.classMap(Post.class, PostDTO.class)
-                .field("user.id", "userId")
-                .exclude("tags")
-                .byDefault()
-                .register();
         PostDTO postDTO = mapper.map(post, PostDTO.class);
         postDTO.setTags(tagsFormatter.print(post.getTags()));
         return postDTO;
@@ -69,18 +87,6 @@ public class MappingService {
     }
 
     public List<PostListDTO> postListToPostListDTO(List<Post> posts) {
-        mapperFactory.classMap(Post.class, PostListDTO.class)
-                .field("user.name", "userName")
-                .exclude("tags")
-                .byDefault()
-                .customize(new CustomMapper<Post, PostListDTO>() {
-                    @Override
-                    public void mapAtoB(Post post, PostListDTO postListDTO, MappingContext context) {
-                        super.mapAtoB(post, postListDTO, context);
-                        postListDTO.setTags(tagsFormatter.print(post.getTags()));
-                    }
-                })
-                .register();
         return mapper.mapAsList(posts, PostListDTO.class);
     }
 

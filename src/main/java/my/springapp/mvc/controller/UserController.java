@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @RequestMapping("/users")
+@Transactional
 public class UserController {
 
     @Autowired

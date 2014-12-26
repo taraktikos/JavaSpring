@@ -19,7 +19,7 @@ public class Tag {
     @NotEmpty
     private String name;
 
-    @ManyToMany(mappedBy = "tags", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "tags")
     private Set<Post> posts = new HashSet<Post>();
 
     @DateTimeFormat(pattern="MM/dd/yyyy")
