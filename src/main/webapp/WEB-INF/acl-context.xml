@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+       <util:map id="permissions">
+              <entry key="ROLE_ADMIN" value-ref="admin" />
+              <entry key="ROLE_MANAGER" value-ref="manager" />
+              <entry key="ROLE_USER" value-ref="user" />
+       </util:map>
+
+       <bean id="admin" class="my.springapp.mvc.security.Permission">
+              <property name="objects">
+                     <map>
+                            <entry key="my.springapp.mvc.entity.Post">
+                                   <list>
+                                          <value>READ_OWN</value>
+                                          <value>READ_ALL</value>
+                                          <value>WRITE_OWN</value>
+                                          <value>WRITE_ALL</value>
+                                   </list>
+                            </entry>
+                     </map>
+              </property>
+       </bean>
+
+       <bean id="manager" class="my.springapp.mvc.security.Permission">
+              <property name="objects">
+                     <map>
+                            <entry key="my.springapp.mvc.entity.Post">
+                                   <list>
+                                          <value>READ_OWN</value>
+                                          <value>READ_ALL</value>
+                                          <value>WRITE_OWN</value>
+                                   </list>
+                            </entry>
+                     </map>
+              </property>
+       </bean>
+
+       <bean id="user" class="my.springapp.mvc.security.Permission">
+              <property name="objects">
+                     <map>
+                            <entry key="my.springapp.mvc.entity.Post">
+                                   <list>
+                                          <value>READ_ALL</value>
+                                   </list>
+                            </entry>
+                     </map>
+              </property>
+       </bean>
+</beans>

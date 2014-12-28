@@ -1,7 +1,7 @@
 package my.springapp.mvc.entity;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name="roles")
@@ -11,8 +11,8 @@ public class Role {
     @GeneratedValue
     private Long id;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> user;
+    @OneToMany(mappedBy = "user")
+    private List<User> user;
 
     private String role;
 
@@ -28,11 +28,11 @@ public class Role {
         this.role = role;
     }
 
-    public Set<User> getUser() {
+    public List<User> getUser() {
         return user;
     }
 
-    public void setUser(Set<User> user) {
+    public void setUser(List<User> user) {
         this.user = user;
     }
 }

@@ -29,9 +29,9 @@ public class User {
     @OneToMany(mappedBy="user")
     private List<Post> posts;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name="user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<Role>();
+    @ManyToOne
+    @JoinColumn(name ="role_id")
+    private Role role;
 
     @DateTimeFormat(pattern="MM/dd/yyyy")
     @Column(name="created_at")
@@ -85,11 +85,4 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 }
