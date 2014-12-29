@@ -27,7 +27,7 @@ public class AppUserDetailsService implements UserDetailsService {
         }
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
        // for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            authorities.add(new SimpleGrantedAuthority(user.getRole()));
         //}
         return new User(username, user.getPassword(), authorities);
     }

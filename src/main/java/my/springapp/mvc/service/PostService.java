@@ -5,6 +5,9 @@ import my.springapp.mvc.entity.Tag;
 import my.springapp.mvc.repository.PostRepository;
 import my.springapp.mvc.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -27,14 +30,17 @@ public class PostService {
     @PersistenceContext
     private EntityManager em;
 
+    @PostFilter("hasPermission(filterObject, 'READ_ALL') || hasPermission(filterObject, 'READ_OWN')")
     public List<Post> findAll() {
         return postRepository.findAll();
     }
 
+    @PostAuthorize("hasPermission(returnObject, 'READ_ALL') || hasPermission(returnObject, 'READ_OWN')")
     public Post findOne(Long id) {
         return postRepository.findOne(id);
     }
 
+    @PreAuthorize("hasPermission(#post, 'WRITE_ALL') || hasPermission(#post, 'WRITE_OWN')")
     public void save(Post post) {
         Set<Tag> savedTags = new HashSet<Tag>();
         for (Tag tag: post.getTags()) {
@@ -48,8 +54,9 @@ public class PostService {
         em.merge(post);
     }
 
-    public void delete(Long id) {
-        postRepository.delete(id);
+    @PreAuthorize("hasPermission(#post, 'DELETE_ALL')")
+    public void delete(Post post) {
+        postRepository.delete(post.getId());
     }
 
 }

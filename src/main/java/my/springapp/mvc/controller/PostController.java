@@ -7,7 +7,6 @@ import my.springapp.mvc.service.MappingService;
 import my.springapp.mvc.service.PostService;
 import my.springapp.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -41,7 +40,6 @@ public class PostController {
         return "post/list";
     }
 
-    @Secured({"ROLE_ADMIN"})
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model){
         model.addAttribute("post", new PostDTO());
@@ -49,7 +47,6 @@ public class PostController {
         return "post/form";
     }
 
-    @Secured({"ROLE_ADMIN"})
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String add(@Valid @ModelAttribute("post") PostDTO postDTO, BindingResult result, Model model){
         Post post = mappingService.postDTOToPost(postDTO);
@@ -62,7 +59,6 @@ public class PostController {
         return "post/form";
     }
 
-    @Secured({"ROLE_ADMIN"})
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String edit(@PathVariable("id") Long id, Model model){
         PostDTO postDTO = mappingService.postToPostDTO(postService.findOne(id));
@@ -71,7 +67,6 @@ public class PostController {
         return "post/form";
     }
 
-    @Secured({"ROLE_ADMIN"})
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     public String update(@Valid @ModelAttribute("post") PostDTO postDTO, BindingResult result, @PathVariable("id") Long id, Model model){
         Post post = postService.findOne(id);
@@ -85,10 +80,9 @@ public class PostController {
         return "post/form";
     }
 
-    @Secured({"ROLE_ADMIN"})
     @RequestMapping("/remove/{id}")
     public String remove(@PathVariable("id") Long id){
-        postService.delete(id);
+        postService.delete(postService.findOne(id));
         return "redirect:/posts";
     }
 

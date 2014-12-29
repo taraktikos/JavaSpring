@@ -10,6 +10,8 @@ public class UserListDTO {
 
     private String username;
 
+    private String role;
+
     private Date createdAt;
 
     public Long getId() {
@@ -44,4 +46,11 @@ public class UserListDTO {
         this.createdAt = createdAt;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

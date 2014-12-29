@@ -31,6 +31,10 @@ public class MappingService {
 
     public MappingService() {
         mapperFactory = new DefaultMapperFactory.Builder().build();
+        mapperFactory.classMap(User.class, UserDTO.class)
+                .exclude("password")
+                .byDefault()
+                .register();
         mapperFactory.classMap(Post.class, PostDTO.class)
                 .field("user.id", "userId")
                 .exclude("tags")

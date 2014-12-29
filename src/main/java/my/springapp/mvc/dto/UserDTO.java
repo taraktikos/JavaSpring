@@ -12,8 +12,10 @@ public class UserDTO {
     @NotEmpty
     private String username;
 
-    @NotEmpty
     private String password;
+
+    @NotEmpty
+    private String role;
 
     public Long getId() {
         return id;
@@ -47,4 +49,11 @@ public class UserDTO {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

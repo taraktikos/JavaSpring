@@ -30,7 +30,6 @@
                             <entry key="my.springapp.mvc.entity.Post">
                                    <list>
                                           <value>READ_OWN</value>
-                                          <value>READ_ALL</value>
                                           <value>WRITE_OWN</value>
                                    </list>
                             </entry>

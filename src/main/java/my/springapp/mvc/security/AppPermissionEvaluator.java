@@ -1,5 +1,8 @@
 package my.springapp.mvc.security;
 
+import my.springapp.mvc.entity.Post;
+import my.springapp.mvc.entity.User;
+import my.springapp.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -20,11 +23,15 @@ public class AppPermissionEvaluator implements PermissionEvaluator {
     @Autowired
     private RoleHierarchy roleHierarchy;
 
+    @Autowired
+    private UserService userService;
+
     private String getRole(Authentication authentication) {
         String highestRole = null;
 
         try {
-            Collection<? extends GrantedAuthority> authorities = roleHierarchy.getReachableGrantedAuthorities(authentication.getAuthorities());
+            //Collection<? extends GrantedAuthority> authorities = roleHierarchy.getReachableGrantedAuthorities(authentication.getAuthorities());
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             for (GrantedAuthority auth: authorities) {
                 highestRole = auth.getAuthority();
                 break;
@@ -41,7 +48,8 @@ public class AppPermissionEvaluator implements PermissionEvaluator {
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
         String role = getRole(authentication);
-        return hasPermission(role, permission, targetDomainObject);
+        User user = userService.findByUsername(authentication.getName());
+        return hasPermission(role, permission, targetDomainObject, user);
     }
 
     @Override
@@ -49,12 +57,19 @@ public class AppPermissionEvaluator implements PermissionEvaluator {
         return false;
     }
 
-    public boolean hasPermission(String role, Object permission, Object domain) {
+    public boolean hasPermission(String role, Object permission, Object domain, User currentUser) {
         if (permissions.containsKey(role)) {
             Permission userPermission = (Permission) permissions.get(role);
             if (userPermission.getObjects().containsKey(domain.getClass().getName())) {
                 for (String action: userPermission.getObjects().get(domain.getClass().getName())) {
                     if (action.equals(permission)) {
+                        if (action.contains("_OWN")) {
+                            if (domain instanceof Post) {
+                                if (((Post) domain).getUser().getId() != currentUser.getId()) {
+                                    return false;
+                                }
+                            }
+                        }
                         return true;
                     }
                 }

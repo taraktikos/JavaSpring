@@ -3,6 +3,7 @@ package my.springapp.mvc.service;
 import my.springapp.mvc.entity.User;
 import my.springapp.mvc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -17,6 +18,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PersistenceContext
     private EntityManager em;
 
@@ -30,12 +34,15 @@ public class UserService {
 
     public void save(User user) {
         if (user.getId() == null) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
         } else {
             User savedUser = userRepository.findOne(user.getId());
             savedUser.setName(user.getName());
             savedUser.setUsername(user.getUsername());
-            savedUser.setPassword(user.getPassword());
+            if (user.getPassword() != null) {
+                savedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
             em.merge(savedUser);
         }
     }

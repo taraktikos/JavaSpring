@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/users")
@@ -29,6 +31,9 @@ public class UserController {
     @Autowired
     MappingService mappingService;
 
+    @Resource(name="permissions")
+    private Map permissions;
+
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public String list(Model model){
         List<UserListDTO> users = mappingService.userListToUserListDTO(userService.findAll());
@@ -39,6 +44,7 @@ public class UserController {
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model){
         model.addAttribute("user", new UserDTO());
+        model.addAttribute("permissions", permissions);
         return "user/form";
     }
 
@@ -50,6 +56,7 @@ public class UserController {
             return "redirect:/users";
         }
         model.addAttribute("user", userDTO);
+        model.addAttribute("permissions", permissions);
         return "user/form";
     }
 
@@ -57,6 +64,7 @@ public class UserController {
     public String edit(@PathVariable("id") Long id, Model model){
         UserDTO userDTO = mappingService.userToUserDTO(userService.findOne(id));
         model.addAttribute("user", userDTO);
+        model.addAttribute("permissions", permissions);
         return "user/form";
     }
 
@@ -69,6 +77,7 @@ public class UserController {
             return "redirect:/users";
         }
         model.addAttribute("user", userDTO);
+        model.addAttribute("permissions", permissions);
         return "user/form";
     }
 

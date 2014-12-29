@@ -29,9 +29,8 @@ public class User {
     @OneToMany(mappedBy="user")
     private List<Post> posts;
 
-    @ManyToOne
-    @JoinColumn(name ="role_id")
-    private Role role;
+    @NotEmpty
+    private String role;
 
     @DateTimeFormat(pattern="MM/dd/yyyy")
     @Column(name="created_at")
@@ -85,4 +84,11 @@ public class User {
         this.createdAt = createdAt;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

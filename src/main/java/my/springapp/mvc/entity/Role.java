@@ -11,9 +11,6 @@ public class Role {
     @GeneratedValue
     private Long id;
 
-    @OneToMany(mappedBy = "user")
-    private List<User> user;
-
     private String role;
 
     public Long getId() {
@@ -28,11 +25,4 @@ public class Role {
         this.role = role;
     }
 
-    public List<User> getUser() {
-        return user;
-    }
-
-    public void setUser(List<User> user) {
-        this.user = user;
-    }
 }
