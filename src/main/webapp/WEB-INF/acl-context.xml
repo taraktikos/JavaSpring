@@ -18,6 +18,14 @@
                                           <value>READ_ALL</value>
                                           <value>WRITE_OWN</value>
                                           <value>WRITE_ALL</value>
+                                          <value>DELETE_ALL</value>
+                                   </list>
+                            </entry>
+                            <entry key="my.springapp.mvc.entity.User">
+                                   <list>
+                                          <value>READ_ALL</value>
+                                          <value>WRITE_ALL</value>
+                                          <value>DELETE_ALL</value>
                                    </list>
                             </entry>
                      </map>
@@ -26,11 +34,18 @@
 
        <bean id="manager" class="my.springapp.mvc.security.Permission">
               <property name="objects">
+                     <!--list-->
                      <map>
                             <entry key="my.springapp.mvc.entity.Post">
                                    <list>
-                                          <value>READ_OWN</value>
+                                          <value>READ_ALL</value>
                                           <value>WRITE_OWN</value>
+                                          <value>DELETE_OWN</value>
+                                   </list>
+                            </entry>
+                            <entry key="my.springapp.mvc.entity.User">
+                                   <list>
+
                                    </list>
                             </entry>
                      </map>

@@ -3,6 +3,9 @@ package my.springapp.mvc.service;
 import my.springapp.mvc.entity.User;
 import my.springapp.mvc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +27,21 @@ public class UserService {
     @PersistenceContext
     private EntityManager em;
 
+    @PostFilter("hasPermission(filterObject, 'READ_ALL')")
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
+    public List<User> findAllBloggers() {
+        return userRepository.findAll();
+    }
+
+    @PostAuthorize("hasPermission(returnObject, 'READ_ALL')")
     public User findOne(Long id) {
         return userRepository.findOne(id);
     }
 
+    @PreAuthorize("hasPermission(#user, 'WRITE_ALL')")
     public void save(User user) {
         if (user.getId() == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -47,8 +57,11 @@ public class UserService {
         }
     }
 
-    public void delete(Long id) {
-        userRepository.delete(id);
+    //reset password todo
+
+    @PreAuthorize("hasPermission(#user, 'DELETE_ALL')")
+    public void delete(User user) {
+        userRepository.delete(user.getId());
     }
 
     public User findByUsername(String username) {

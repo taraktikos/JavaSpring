@@ -83,7 +83,7 @@ public class UserController {
 
     @RequestMapping("/remove/{id}")
     public String remove(@PathVariable("id") Long id){
-        userService.delete(id);
+        userService.delete(userService.findOne(id));
         return "redirect:/users";
     }
 

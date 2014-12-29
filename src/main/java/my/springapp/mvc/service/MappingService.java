@@ -12,6 +12,7 @@ import my.springapp.mvc.dto.UserListDTO;
 import my.springapp.mvc.entity.Post;
 import my.springapp.mvc.entity.User;
 import my.springapp.mvc.formatter.TagsFormatter;
+import my.springapp.mvc.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ import java.util.List;
 public class MappingService {
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
     @Autowired
     private TagsFormatter tagsFormatter;
@@ -76,7 +77,7 @@ public class MappingService {
     public Post postDTOToPost(PostDTO postDTO, Post post) {
         mapper.map(postDTO, post);
         post.setTags(tagsFormatter.parse(postDTO.getTags()));
-        post.setUser(userService.findOne(postDTO.getUserId()));
+        post.setUser(userRepository.findOne(postDTO.getUserId()));
         return post;
     }
 

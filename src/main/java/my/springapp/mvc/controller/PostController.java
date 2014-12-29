@@ -43,7 +43,7 @@ public class PostController {
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String create(Model model){
         model.addAttribute("post", new PostDTO());
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("users", userService.findAllBloggers());
         return "post/form";
     }
 
@@ -55,7 +55,7 @@ public class PostController {
             return "redirect:/posts";
         }
         model.addAttribute("post", postDTO);
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("users", userService.findAllBloggers());
         return "post/form";
     }
 
@@ -63,7 +63,7 @@ public class PostController {
     public String edit(@PathVariable("id") Long id, Model model){
         PostDTO postDTO = mappingService.postToPostDTO(postService.findOne(id));
         model.addAttribute("post", postDTO);
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("users", userService.findAllBloggers());
         return "post/form";
     }
 
@@ -76,7 +76,7 @@ public class PostController {
             return "redirect:/posts";
         }
         model.addAttribute("post", postDTO);
-        model.addAttribute("users", userService.findAll());
+        model.addAttribute("users", userService.findAllBloggers());
         return "post/form";
     }
 
