@@ -14,9 +14,7 @@
                      <map>
                             <entry key="my.springapp.mvc.entity.Post">
                                    <list>
-                                          <value>READ_OWN</value>
                                           <value>READ_ALL</value>
-                                          <value>WRITE_OWN</value>
                                           <value>WRITE_ALL</value>
                                           <value>DELETE_ALL</value>
                                    </list>
@@ -25,7 +23,6 @@
                                    <list>
                                           <value>READ_ALL</value>
                                           <value>WRITE_ALL</value>
-                                          <value>DELETE_ALL</value>
                                    </list>
                             </entry>
                      </map>
@@ -40,7 +37,6 @@
                                    <list>
                                           <value>READ_ALL</value>
                                           <value>WRITE_OWN</value>
-                                          <value>DELETE_OWN</value>
                                    </list>
                             </entry>
                             <entry key="my.springapp.mvc.entity.User">
@@ -57,7 +53,7 @@
                      <map>
                             <entry key="my.springapp.mvc.entity.Post">
                                    <list>
-                                          <value>READ_ALL</value>
+                                          <value>READ_OWN</value>
                                    </list>
                             </entry>
                      </map>

@@ -1,9 +1,9 @@
 package my.springapp.mvc.service;
 
+import my.springapp.mvc.security.UserSecurity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,10 +26,9 @@ public class AppUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException(username + " not found");
         }
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-       // for (String role : roles) {
-            authorities.add(new SimpleGrantedAuthority(user.getRole()));
-        //}
-        return new User(username, user.getPassword(), authorities);
+        authorities.add(new SimpleGrantedAuthority(user.getRole()));
+
+        return new UserSecurity(user.getId(), username, user.getPassword(), authorities);
     }
 
 }

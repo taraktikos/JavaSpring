@@ -29,6 +29,9 @@ public class Post {
     @JoinColumn(name ="user_id", nullable=false)
     private User user;
 
+    @Transient
+    private Long ownerId;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="post_tags", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags = new HashSet<Tag>();
@@ -90,4 +93,12 @@ public class Post {
         this.tags = tags;
     }
 
+    @PostLoad
+    public void setOwner() {
+        ownerId = user.getId();
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
 }
