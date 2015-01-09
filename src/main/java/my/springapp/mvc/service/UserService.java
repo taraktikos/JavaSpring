@@ -56,9 +56,7 @@ public class UserService {
             em.merge(savedUser);
         }
     }
-
-    //reset password todo
-
+    
     @PreAuthorize("hasPermission(#user, 'USER_WRITE')")
     public void delete(User user) {
         userRepository.delete(user.getId());
