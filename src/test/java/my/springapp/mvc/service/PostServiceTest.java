@@ -40,53 +40,34 @@ public class PostServiceTest extends AppTests {
         posts = postRepository.findAll();
     }
 
-    @After
-    public void tearDown() {
-        SecurityContextHolder.clearContext();
-    }
-
-    public void login(String role) {
-        Authentication auth;
-        if (role.equals("ROLE_ADMIN")) {
-            auth = new UsernamePasswordAuthenticationToken("admin", "123456");
-        } else if (role.equals("ROLE_MANAGER")) {
-            auth = new UsernamePasswordAuthenticationToken("manager", "123456");
-        } else {
-            auth = new UsernamePasswordAuthenticationToken("user", "123456");
-        }
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        securityContext.setAuthentication(auth);
-    }
-
     @Test
     public void findAllTest() throws Exception {
-//        assertEquals(0, postService.findAll().size());
-        login("ROLE_USER");
+        loginUser();
         assertEquals(1, postService.findAll().size());
 
-        login("ROLE_MANAGER");
+        loginManager();
         assertEquals(3, postService.findAll().size());
 
-        login("ROLE_ADMIN");
+        loginAdmin();
         assertEquals(3, postService.findAll().size());
     }
 
     @Test
     public void findOneTest() throws Exception {
-        login("ROLE_USER");
+        loginUser();
         assertEquals(posts.get(2).getId(), postService.findOne(posts.get(2).getId()).getId());
     }
 
     @Test(expected = AccessDeniedException.class)
     public void findOneAccessDeniedTest() throws Exception {
-        login("ROLE_USER");
+        loginUser();
         postService.findOne(posts.get(0).getId());
     }
 
     @Test
     @Transactional
     public void saveTest() throws Exception {
-        login("ROLE_ADMIN");
+        loginAdmin();
         Post post = postService.findOne(posts.get(0).getId());
         User user = userRepository.findOne(2L);
         post.setUser(user);
@@ -97,7 +78,7 @@ public class PostServiceTest extends AppTests {
     @Test(expected = AccessDeniedException.class)
     @Transactional
     public void saveAccessDeniedManagerTest() throws Exception {
-        login("ROLE_MANAGER");
+        loginManager();
         Post post = postService.findOne(posts.get(0).getId());
         User user = userRepository.findOne(2L);
         post.setUser(user);
@@ -106,7 +87,36 @@ public class PostServiceTest extends AppTests {
 
     @Test(expected = AccessDeniedException.class)
     public void saveAccessDeniedUserTest() throws Exception {
-        login("ROLE_USER");
+        loginUser();
         postService.save(posts.get(2));
     }
+
+    @Test
+    @Transactional
+    public void deleteTest() throws Exception {
+        loginAdmin();
+        Post post = postService.findOne(posts.get(0).getId());
+        postService.delete(post);
+
+        loginManager();
+        post = postService.findOne(posts.get(1).getId());
+        postService.delete(post);
+    }
+
+    @Test(expected = AccessDeniedException.class)
+    @Transactional
+    public void deleteAccessDeniedUserTest() throws Exception {
+        loginUser();
+        Post post = postService.findOne(posts.get(0).getId());
+        postService.delete(post);
+    }
+
+    @Test(expected = AccessDeniedException.class)
+    @Transactional
+    public void deleteAccessDeniedManagerTest() throws Exception {
+        loginManager();
+        Post post = postService.findOne(posts.get(0).getId());
+        postService.delete(post);
+    }
+
 }

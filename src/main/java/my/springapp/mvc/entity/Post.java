@@ -30,7 +30,7 @@ public class Post {
     private User user;
 
     @Transient
-    private Long ownerId;
+    transient private Long ownerId;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="post_tags", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))

@@ -30,17 +30,17 @@ public class PostService {
     @PersistenceContext
     private EntityManager em;
 
-    @PostFilter("hasPermission(filterObject, 'READ')")
+    @PostFilter("hasPermission(filterObject, 'POST_READ')")
     public List<Post> findAll() {
         return postRepository.findAll();
     }
 
-    @PostAuthorize("hasPermission(returnObject, 'READ')")
+    @PostAuthorize("hasPermission(returnObject, 'POST_READ')")
     public Post findOne(Long id) {
         return postRepository.findOne(id);
     }
 
-    @PreAuthorize("hasPermission(#post, 'WRITE')")
+    @PreAuthorize("hasPermission(#post, 'POST_WRITE')")
     public void save(Post post) {
         Set<Tag> savedTags = new HashSet<Tag>();
         for (Tag tag: post.getTags()) {
@@ -54,7 +54,7 @@ public class PostService {
         em.merge(post);
     }
 
-    @PreAuthorize("hasPermission(#post, 'DELETE')")
+    @PreAuthorize("hasPermission(#post, 'POST_WRITE')")
     public void delete(Post post) {
         postRepository.delete(post.getId());
     }

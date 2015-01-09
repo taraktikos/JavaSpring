@@ -27,7 +27,7 @@ public class UserService {
     @PersistenceContext
     private EntityManager em;
 
-    @PostFilter("hasPermission(filterObject, 'READ')")
+    @PostFilter("hasPermission(filterObject, 'USER_READ')")
     public List<User> findAll() {
         return userRepository.findAll();
     }
@@ -36,12 +36,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    @PostAuthorize("hasPermission(returnObject, 'READ')")
+    @PostAuthorize("hasPermission(returnObject, 'USER_READ')")
     public User findOne(Long id) {
         return userRepository.findOne(id);
     }
 
-    @PreAuthorize("hasPermission(#user, 'WRITE')")
+    @PreAuthorize("hasPermission(#user, 'USER_WRITE')")
     public void save(User user) {
         if (user.getId() == null) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -59,7 +59,7 @@ public class UserService {
 
     //reset password todo
 
-    @PreAuthorize("hasPermission(#user, 'DELETE')")
+    @PreAuthorize("hasPermission(#user, 'USER_WRITE')")
     public void delete(User user) {
         userRepository.delete(user.getId());
     }
