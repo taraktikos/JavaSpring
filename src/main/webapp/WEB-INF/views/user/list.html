@@ -65,13 +65,15 @@
                     <td th:text="${{user.role}}">user role</td>
                     <td th:text="${{user.createdAt}}">10/10/2015</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" th:href="@{/users/edit/{id}(id=${user.id})}">Update</a>
-                        <a class="btn btn-danger btn-sm" th:href="@{/users/remove/{id}(id=${user.id})}">Delete</a>
+                        <div sec:authorize="hasRole('ROLE_ADMIN')">
+                            <a class="btn btn-primary btn-sm" th:href="@{/users/edit/{id}(id=${user.id})}">Update</a>
+                            <a class="btn btn-danger btn-sm" th:href="@{/users/remove/{id}(id=${user.id})}">Delete</a>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <a class="btn btn-primary" th:href="@{/users/create}" href="./form.html">Create</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary" th:href="@{/users/create}" href="./form.html">Create</a>
     </div>
 
     <script th:src="@{/assets/js/jquery-2.1.3.min.js}" src="../../assets/js/jquery-2.1.3.min.js"></script>

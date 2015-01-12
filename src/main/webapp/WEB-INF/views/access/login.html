@@ -28,7 +28,7 @@
                 <ul class="nav navbar-nav">
                     <li><a th:href="@{/}" href="./welcome.html">Home</a></li>
                     <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/users}" href="./user/list.html" th:text="User">User</a></li>
-                    <li><a th:href="@{/posts}" href="./post/list.html" th:text="#{menu.blog}">Blog</a></li>
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/posts}" href="./post/list.html" th:text="#{menu.blog}">Blog</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="active" sec:authorize="!isAuthenticated()"><a href="./access/login.html" th:href="@{/login}">Login</a></li>

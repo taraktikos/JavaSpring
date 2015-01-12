@@ -18,7 +18,6 @@ public class Post {
     private Long id;
 
     @NotEmpty
-    @Size(min=4, max=255)
     private String title;
 
     @NotEmpty

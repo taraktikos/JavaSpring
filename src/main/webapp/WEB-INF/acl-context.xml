@@ -21,7 +21,7 @@
               </entry>
               <entry key="ROLE_USER">
                   <list>
-                      <value>POST_READ_OWN</value>
+                      <value>POST_READ_ALL</value>
                   </list>
               </entry>
        </util:map>

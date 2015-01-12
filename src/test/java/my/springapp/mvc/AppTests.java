@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @WebAppConfiguration
 @ContextConfiguration({
         "file:src/main/webapp/WEB-INF/mvc-dispatcher-servlet.xml",
-        "file:src/main/webapp/WEB-INF/parameters-test-context.xml",
+        "classpath:/parameters-test-context.xml",
         "file:src/main/webapp/WEB-INF/root-context.xml",
         "file:src/main/webapp/WEB-INF/spring-security.xml"
 })
