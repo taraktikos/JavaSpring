@@ -5,6 +5,7 @@ import my.springapp.mvc.dto.PostListDTO;
 import my.springapp.mvc.entity.Post;
 import my.springapp.mvc.service.MappingService;
 import my.springapp.mvc.service.PostService;
+import my.springapp.mvc.service.RuleProvider;
 import my.springapp.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,9 @@ public class PostController {
     @Autowired
     MappingService mappingService;
 
+    @Autowired
+    RuleProvider ruleProvider;
+
     @RequestMapping(value = {"", "/"}, method = RequestMethod.GET)
     public String list(Model model){
         List<PostListDTO> posts = mappingService.postListToPostListDTO(postService.findAll());
@@ -51,6 +55,7 @@ public class PostController {
     public String add(@Valid @ModelAttribute("post") PostDTO postDTO, BindingResult result, Model model){
         Post post = mappingService.postDTOToPost(postDTO);
         if (!result.hasErrors()) {
+            ruleProvider.run(post);
             postService.save(post);
             return "redirect:/posts";
         }

@@ -50,13 +50,16 @@ public class UserService {
             User savedUser = userRepository.findOne(user.getId());
             savedUser.setName(user.getName());
             savedUser.setUsername(user.getUsername());
-            if (user.getPassword() != null) {
-                savedUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            }
             em.merge(savedUser);
         }
     }
-    
+    //todo
+//    public void updatePassword() {
+//        if (user.getPassword() != null) {
+//            savedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+//        }
+//    }
+//
     @PreAuthorize("hasPermission(#user, 'USER_WRITE')")
     public void delete(User user) {
         userRepository.delete(user.getId());
