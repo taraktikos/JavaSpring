@@ -29,6 +29,7 @@
                     <li class="active"><a th:href="@{/}" href="./welcome.html">Home</a></li>
                     <li sec:authorize="isAuthenticated()"><a th:href="@{/users}" href="./user/list.html" th:text="User">User</a></li>
                     <li sec:authorize="isAuthenticated()"><a th:href="@{/posts}" href="./post/list.html" th:text="#{menu.blog}">Blog</a></li>
+                    <li sec:authorize="isAuthenticated()"><a th:href="@{/posts/stats}" href="./stats.html">Stats</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li sec:authorize="!isAuthenticated()"><a href="./access/login.html" th:href="@{/login}">Login</a></li>

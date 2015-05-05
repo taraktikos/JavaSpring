@@ -28,8 +28,8 @@
                 <ul class="nav navbar-nav">
                     <li><a th:href="@{/}" href="./../welcome.html">Home</a></li>
                     <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/users}" href="./../user/list.html" th:text="User">User</a></li>
-                    <li class="active"><a th:href="@{/posts}" href="./list.html" th:text="#{menu.blog}">Blog</a></li>
-                    <li><a th:href="@{/posts/stats}" href="./stats.html">Stats</a></li>
+                    <li><a th:href="@{/posts}" href="./list.html" th:text="#{menu.blog}">Blog</a></li>
+                    <li class="active"><a th:href="@{/posts/stats}" href="./stats.html">Stats</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="active" sec:authorize="!isAuthenticated()"><a href="./access/login.html" th:href="@{/login}">Login</a></li>
@@ -52,34 +52,17 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th th:text="#{postList.title}">Title</th>
-                    <th th:text="#{postList.text}">Text</th>
-                    <th th:text="User">Text</th>
-                    <th th:text="Tags">Tags</th>
-                    <th th:text="#{postList.createdAt}">Tags</th>
-                    <th th:text="#{postList.action}">Action</th>
+                    <th th:text="#{postList.title}">Word</th>
+                    <th th:text="#{postList.text}">Number of repetitions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="post: ${posts}">
-                    <td th:text="${{post.title}}">post title</td>
-                    <td th:text="${{post.text}}">post text</td>
-                    <td th:text="${{post.userName}}">User name</td>
-                    <td th:text="${{post.tags}}">User name</td>
-                    <td th:text="${{post.createdAt}}">10/10/2015</td>
-                    <td>
-                        <div sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')">
-                            <a class="btn btn-primary btn-sm" th:text="#{postList.update}" th:href="@{/posts/edit/{id}(id=${post.id})}">Update</a>
-                            <a class="btn btn-danger btn-sm" th:href="@{/posts/remove/{id}(id=${post.id})}">Delete</a>
-                        </div>
-                    </td>
+                <tr th:each="stat: ${stats}">
+                    <td th:text="${{stat.word}}">word</td>
+                    <td th:text="${{stat.count}}">0</td>
                 </tr>
             </tbody>
         </table>
-        <a sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')" class="btn btn-primary" th:href="@{/posts/create}" href="./form.html">Create</a>
     </div>
-
-    <script th:src="@{/assets/js/jquery-2.1.3.min.js}" src="../../assets/js/jquery-2.1.3.min.js"></script>
-    <script th:src="@{/assets/js/bootstrap.js}" src="../../../assets/js/bootstrap.js"></script>
 </body>
 </html>

@@ -76,6 +76,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=17 ;
 
+DROP TABLE IF EXISTS `output`;
+CREATE TABLE IF NOT EXISTS `output` (
+  `word` varchar(255) NOT NULL,
+  `count` int(11) NOT NULL,
+  UNIQUE KEY `word` (`word`)
+) ENGINE=InnoDB;
+
 --
 -- Constraints for dumped tables
 --

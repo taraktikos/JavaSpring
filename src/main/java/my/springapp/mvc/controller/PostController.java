@@ -3,11 +3,13 @@ package my.springapp.mvc.controller;
 import my.springapp.mvc.dto.PostDTO;
 import my.springapp.mvc.dto.PostListDTO;
 import my.springapp.mvc.entity.Post;
+import my.springapp.mvc.repository.OutputRepository;
 import my.springapp.mvc.service.MappingService;
 import my.springapp.mvc.service.PostService;
 import my.springapp.mvc.service.RuleProvider;
 import my.springapp.mvc.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +32,9 @@ public class PostController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OutputRepository outputRepository;
 
     @Autowired
     MappingService mappingService;
@@ -89,6 +94,12 @@ public class PostController {
     public String remove(@PathVariable("id") Long id){
         postService.delete(postService.findOne(id));
         return "redirect:/posts";
+    }
+
+    @RequestMapping("/stats")
+    public String remove(Model model){
+        model.addAttribute("stats", outputRepository.findAll(new Sort(Sort.Direction.DESC, "count")));
+        return "post/stats";
     }
 
 }
